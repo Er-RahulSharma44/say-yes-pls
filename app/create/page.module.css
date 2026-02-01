@@ -187,16 +187,68 @@
 }
 
 @media (max-width: 768px) {
+  .container {
+    padding: 1rem;
+  }
+  
   .contentBox {
-    padding: 2rem;
+    padding: 1.5rem;
+    border-radius: 15px;
   }
   
   .glitch {
-    font-size: 2rem;
+    font-size: 1.8rem;
+    margin-bottom: 1.5rem;
+  }
+  
+  .form {
+    gap: 1.2rem;
+  }
+  
+  .formGroup input,
+  .formGroup select {
+    padding: 0.9rem;
+    font-size: 0.95rem;
+  }
+  
+  .btnPrimary {
+    padding: 1rem 1.5rem;
+    font-size: 1rem;
+    letter-spacing: 1px;
   }
   
   .linkContainer {
     flex-direction: column;
+  }
+  
+  .shareLink {
+    font-size: 0.85rem;
+    padding: 0.7rem;
+  }
+  
+  .btnCopy {
+    padding: 0.7rem 1.2rem;
+    font-size: 0.9rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .contentBox {
+    padding: 1.2rem;
+  }
+  
+  .glitch {
+    font-size: 1.5rem;
+  }
+  
+  .formGroup label {
+    font-size: 0.9rem;
+  }
+  
+  .formGroup input,
+  .formGroup select {
+    padding: 0.8rem;
+    font-size: 0.9rem;
   }
 }
 
