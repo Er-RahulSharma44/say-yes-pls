@@ -3,10 +3,9 @@
 import { useEffect, useState, useRef, Suspense } from 'react'
 import { useSearchParams } from 'next/navigation'
 import { decodeGameData } from '../utils/encode'
-import styles from './page.module.css'
+import styles from '../game/page.module.css'
 
 function GameContent() {
-  const searchParams = useSearchParams()
   const [gameData, setGameData] = useState({
     name: '',
     question: '',
@@ -18,7 +17,18 @@ function GameContent() {
   const noButtonRef = useRef<HTMLButtonElement>(null)
 
   useEffect(() => {
-    // Try to decode from new short URL format first
+    // Get data from URL hash (shortest URL format)
+    const hash = window.location.hash.substring(1) // Remove the #
+    if (hash) {
+      const decoded = decodeGameData(hash)
+      if (decoded) {
+        setGameData(decoded)
+        return
+      }
+    }
+    
+    // Fallback to query params
+    const searchParams = new URLSearchParams(window.location.search)
     const encoded = searchParams.get('v')
     if (encoded) {
       const decoded = decodeGameData(encoded)
@@ -36,7 +46,7 @@ function GameContent() {
     const noText = searchParams.get('noText') || 'No'
 
     setGameData({ name, question, theme, yesText, noText })
-  }, [searchParams])
+  }, [])
 
   useEffect(() => {
     const noButton = noButtonRef.current
