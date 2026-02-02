@@ -14,7 +14,22 @@ function GameContent() {
     noText: 'No'
   })
   const [showCelebration, setShowCelebration] = useState(false)
+  const [isMobile, setIsMobile] = useState(false)
+  const [celebrationStage, setCelebrationStage] = useState(0)
   const noButtonRef = useRef<HTMLButtonElement>(null)
+
+  useEffect(() => {
+    // Detect mobile device
+    const checkMobile = () => {
+      const mobileRegex = /iPhone|iPad|iPod|Android|webOS|BlackBerry|Windows Phone/i
+      const isMobileDevice = mobileRegex.test(navigator.userAgent) || 
+                            (window.innerWidth <= 768 && window.innerHeight <= 1024)
+      setIsMobile(isMobileDevice)
+    }
+    checkMobile()
+    window.addEventListener('resize', checkMobile)
+    return () => window.removeEventListener('resize', checkMobile)
+  }, [])
 
   useEffect(() => {
     // Get data from URL hash (shortest URL format)
@@ -173,10 +188,34 @@ function GameContent() {
 
   const handleYesClick = () => {
     setShowCelebration(true)
+    // Animate through different celebration stages
+    setTimeout(() => setCelebrationStage(1), 1000)
+    setTimeout(() => setCelebrationStage(2), 2500)
+    setTimeout(() => setCelebrationStage(3), 4000)
   }
 
   const getThemeClass = () => {
     return styles[`theme${gameData.theme.charAt(0).toUpperCase() + gameData.theme.slice(1)}`]
+  }
+
+  // Show mobile message if on mobile
+  if (isMobile) {
+    return (
+      <div className={styles.container}>
+        <div className={styles.stars}></div>
+        <div className={styles.mobileMessage}>
+          <div className={styles.mobileIcon}>📱➡️💻</div>
+          <h1 className={styles.mobileTitle}>Oops! This game needs a laptop! 🖥️</h1>
+          <p className={styles.mobileText}>
+            This interactive experience works best on a desktop or laptop computer.
+          </p>
+          <p className={styles.mobileSubtext}>
+            Please open this link on your laptop or desktop to experience the full fun! 😊
+          </p>
+          <div className={styles.mobileEmoji}>💕✨🎉</div>
+        </div>
+      </div>
+    )
   }
 
   return (
@@ -228,9 +267,60 @@ function GameContent() {
                 )
               })}
             </div>
-            <h2 className={styles.celebrationText}>
-              Yay! You said Yes! 🎉💕
-            </h2>
+            
+            {/* Dancing GIF-like animation */}
+            {/* <div className={styles.dancingContainer}>
+              <div className={styles.dancingEmoji}>🎉</div>
+              <div className={styles.dancingEmoji}>💃</div>
+              <div className={styles.dancingEmoji}>🕺</div>
+              <div className={styles.dancingEmoji}>🎊</div>
+            </div> */}
+
+            {/* Stage 0: Initial celebration */}
+            {celebrationStage === 0 && (
+              <h2 className={styles.celebrationText}>
+                Yay! You said Yes! 🎉💕
+              </h2>
+            )}
+
+            {/* Stage 1: I knew it! */}
+            {celebrationStage >= 1 && (
+              <div className={styles.knewItContainer}>
+                <div className={styles.knewItImageWrapper}>
+                  <img
+                    src="/i-knew-it-memes_400-400.jpeg"
+                    alt="I Knew It!"
+                    className={styles.knewItImage}
+                    onError={(e) => {
+                      // Fallback to placeholder if image not found
+                      const target = e.target as HTMLImageElement
+                      target.src = '/i-knew-it-placeholder.svg'
+                    }}
+                  />
+                </div>
+                {/* <div className={styles.winkEmoji}>😉</div> */}
+              </div>
+            )}
+
+            {/* Stage 2: Funny message */}
+            {/* {celebrationStage >= 2 && (
+              <div className={styles.funnyMessage}>
+                <p className={styles.funnyText}>
+                  You never had a choice anyway! 😏✨
+                </p>
+                <div className={styles.smugEmoji}>😎</div>
+              </div>
+            )} */}
+
+            {/* Stage 3: Final celebration */}
+            {/* {celebrationStage >= 3 && (
+              <div className={styles.finalMessage}>
+                <p className={styles.finalText}>
+                  This is going to be amazing! 💖
+                </p>
+              </div>
+            )} */}
+
             <div className={styles.hearts}>
               {[...Array(20)].map((_, i) => {
                 const left = Math.random() * 100

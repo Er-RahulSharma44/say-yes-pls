@@ -13,6 +13,7 @@
   width: 100%;
   text-align: center;
   animation: fadeInUp 0.8s ease-out;
+  
 }
 
 @keyframes fadeInUp {
